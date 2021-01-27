@@ -1,39 +1,33 @@
-
-const handleRegister = (req,res,db,bcrypt) => {
-    const { email, password, name } = req.body;
-    if( email.length !==0 &&name.length !==0 && password.length !==0){
+const handleRegister = (req, res, db, bcrypt) => {
+  const { email, password, name } = req.body;
+  if (email.length !== 0 && name.length !== 0 && password.length !== 0) {
     const hash = bcrypt.hashSync(password);
-    db.transaction(trx => {
-        trx.insert({ email: email, hash: hash })
-            .into('login')
-            .returning('email')        //try to switch order
-            .catch(err => res.json("email already exists"))
-            .then(loginEmail => {
-                return trx('users')
-                    .insert({
-                        email: loginEmail[0],
-                        name: name,
-                        joined: new Date()
-                    })
-                    .returning('*')
-
-                    .then(user => res.json(user[0]))
-                    
-
+    db.transaction((trx) => {
+      trx
+        .insert({ email: email, hash: hash })
+        .into("login")
+        .returning("email") //try to switch order
+        .catch((err) => res.json("email already exists"))
+        .then((loginEmail) => {
+          return trx("users")
+            .insert({
+              email: loginEmail[0],
+              name: name,
+              joined: new Date(),
             })
+            .returning("*")
 
-            .then(trx.commit)
-            .catch(trx.rollback)
+            .then((user) => res.json(user[0]));
+        })
 
-    })}
-    else {
-      return res.status(400).json("Unable to register");
-    }
-
-     
-}
-
+        .then(trx.commit)
+        .catch(trx.rollback);
+    });
+  } else {
+    return res.status(400).json("Unable to register");
+  }
+};
 
 module.exports = {
-    handleRegister : handleRegister
-}
+  handleRegister: handleRegister,
+};

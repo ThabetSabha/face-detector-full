@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const redis = require("redis");
-const redisClient = redis.createClient(process.env.REDIS_URI);
+const redisClient = redis.createClient(process.env.REDISCLOUD_URL);
 
 //grabbing JWT_SECRET from .env
 if (process.env.NODE_ENV !== "production") require("dotenv").config();

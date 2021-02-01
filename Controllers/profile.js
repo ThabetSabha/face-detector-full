@@ -19,10 +19,21 @@ const handleProfileGet = (req, res, db) => {
 
 const handleProfileUpdate = (req, res, db) => {
   const { id } = req.params;
-  const { name } = req.body.formInput;
+  const { name, avatars3key } = req.body.formInput;
+  if (!name && !avatars3key) {
+    return res.status(400).json("nothing to update");
+  }
+
+  const updatedInfo =
+    name && avatars3key
+      ? { name, avatars3key }
+      : name
+      ? { name }
+      : { avatars3key };
+
   db("users")
     .where({ id })
-    .update({ name })
+    .update(updatedInfo)
     .then((resp) => {
       if (resp) {
         res.status(200).json("success");

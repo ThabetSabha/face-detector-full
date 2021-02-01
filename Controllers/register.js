@@ -1,5 +1,5 @@
 const handleRegister = (req, res, db, bcrypt) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, avatars3key } = req.body;
   if (email.length !== 0 && name.length !== 0 && password.length !== 0) {
     const hash = bcrypt.hashSync(password);
     db.transaction((trx) => {
@@ -14,6 +14,7 @@ const handleRegister = (req, res, db, bcrypt) => {
               email: loginEmail[0],
               name: name,
               joined: new Date(),
+              avatars3key,
             })
             .returning("*")
 

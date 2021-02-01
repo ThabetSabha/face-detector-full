@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const redis = require("redis");
-const redisClient = redis.createClient(process.env.REDISCLOUD_URL);
+const redisClient = redis.createClient(process.env.REDIS_URI);
 
 //grabbing JWT_SECRET from .env
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
@@ -65,8 +65,7 @@ const getAuthTokenId = (req, res) => {
 
 //Signs the JWT
 const signToken = (payload) => {
-  let dateCreated = new Date();
-  const jwtPayload = { payload, dateCreated };
+  const jwtPayload = { payload };
   return jwt.sign(jwtPayload, process.env.JWT_SECRET, { expiresIn: "10h" });
 };
 

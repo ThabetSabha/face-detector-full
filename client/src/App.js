@@ -105,13 +105,14 @@ const App = () => {
   //passed to sign in; to load the user after sign in, and to Navigation to load intial state when using Signs out
   const loadUser = (data) => {
     setSignedIn(true);
-    const { id, name, email, joined, entries } = data;
+    const { id, name, email, joined, entries, avatars3key } = data;
     setUser({
-      id: id,
-      name: name,
-      email: email,
-      joined: joined,
-      entries: entries,
+      id,
+      name,
+      email,
+      joined,
+      entries,
+      avatars3key,
     });
     setImageUrl("");
   };
@@ -136,8 +137,8 @@ const App = () => {
 
   //When user submits the image
   const onButtonSubmit = () => {
-    if(imageUrl !== input){
-      setFaceBoxesLocations([])
+    if (imageUrl !== input) {
+      setFaceBoxesLocations([]);
       setImageUrl(input);
       if (input) {
         //returns face detection data from clarifai.
@@ -149,7 +150,7 @@ const App = () => {
           }),
         })
           .then((res) => res.json())
-  
+
           .then((response) => {
             const BoundingBoxesArray = response.outputs[0].data.regions.map(
               (region) => region.region_info.bounding_box
@@ -177,7 +178,7 @@ const App = () => {
                 .then((count) => setUser({ ...user, entries: count }));
             }
           })
-  
+
           .catch((err) => {
             console.log(err, "couldn't fetch image!");
           });
@@ -192,7 +193,7 @@ const App = () => {
         <h1>Loading...</h1>
       ) : (
         <>
-          <Navigation signOut={signOut} />
+          <Navigation signOut={signOut} avatars3key={user.avatars3key} />
 
           <Switch>
             <Route path="/signin">

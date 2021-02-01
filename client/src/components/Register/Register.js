@@ -2,30 +2,34 @@ import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userExists, setUserExists] = useState(false); //email exists alert
-  const [registered, setRegistered] = useState(false); //empty fields alert
-  const [emptyFields, setEmptyFields] = useState(false); //to redirect to signin if true
+  const [registerInfo, setRegisterInfo] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const nameInput = (event) => {
-    setName(event.target.value);
-  };
+  const { email, name, password, confirmPassword } = registerInfo;
 
-  const emailInput = (event) => {
-    setEmail(event.target.value);
-  };
+  const [registered, setRegistered] = useState(false);
 
-  const passwordInput = (event) => {
-    setPassword(event.target.value);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const onInputChange = (event) => {
+    let value = event.target.value;
+    let fieldName = event.target.name;
+    setRegisterInfo({ ...registerInfo, [fieldName]: value });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (email && password && name) {
+    if (email && password && name && confirmPassword) {
       //to check if the fields aren't empty
-      setEmptyFields(false);
+      setErrorMessage(null);
+      if (password !== confirmPassword) {
+        setErrorMessage("*Passwords don't match");
+        return;
+      }
       fetch("register", {
         method: "post",
         headers: { "Content-Type": "application/json" },
@@ -33,6 +37,7 @@ const Register = () => {
           email: email,
           password: password,
           name: name,
+          avatars3key: "avatar.png",
         }),
       })
         .then((res) => res.json()) //either returns user info, or "email already exists."
@@ -41,12 +46,11 @@ const Register = () => {
           if (res.id) {
             setRegistered(true);
           } else {
-            setUserExists(true);
+            setErrorMessage("*Email already exists");
           } //which display the div saying email already exists
         });
     } else {
-      setUserExists(false);
-      setEmptyFields(true);
+      setErrorMessage("*Make sure all fields are filled.");
     }
   };
 
@@ -69,27 +73,29 @@ const Register = () => {
                 <legend className="f2 fw6 ph0 mh0 center">Register</legend>
 
                 <div className="mt3">
-                  <label className="db fw6 lh-copy f5" htmlFor="Name">
+                  <label className="db fw6 lh-copy f5" htmlFor="name">
                     Name
                   </label>
                   <input
                     className="b pa2 input-reset ba b--black bg-transparent hover-bg-black hover-white submitOnEnter"
-                    type="Name"
-                    name="Name"
-                    id="Name"
-                    onChange={nameInput}
+                    type="name"
+                    name="name"
+                    id="name"
+                    onChange={onInputChange}
+                    required
                   />
                 </div>
                 <div className="mt3">
-                  <label className="db fw6 lh-copy f5" htmlFor="email-address">
+                  <label className="db fw6 lh-copy f5" htmlFor="email">
                     Email
                   </label>
                   <input
                     className="b pa2 input-reset ba b--black bg-transparent hover-bg-black hover-white submitOnEnter"
                     type="email"
-                    name="email-address"
-                    id="email-address"
-                    onChange={emailInput}
+                    name="email"
+                    id="email"
+                    onChange={onInputChange}
+                    required
                   />
                 </div>
                 <div className="mt3">
@@ -101,22 +107,28 @@ const Register = () => {
                     type="password"
                     name="password"
                     id="password"
-                    onChange={passwordInput}
+                    onChange={onInputChange}
+                    required
+                  />
+                </div>
+                <div className="mt3">
+                  <label
+                    className="db fw6 lh-copy f5"
+                    htmlFor="confirmPassword"
+                  >
+                    Confirm Password
+                  </label>
+                  <input
+                    className="b pa2 input-reset ba b--black bg-transparent hover-bg-black hover-white submitOnEnter"
+                    type="password"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    onChange={onInputChange}
+                    required
                   />
                 </div>
               </fieldset>
-              {userExists ? (
-                <div className="center red f6 mb3">*Email already exists </div>
-              ) : (
-                <></>
-              )}
-              {emptyFields ? (
-                <div className="center red f6 mb3">
-                  *Make sure all fields are filled.{" "}
-                </div>
-              ) : (
-                <></>
-              )}
+              <div className="center red f6 mb3">{errorMessage}</div>
               <div className="mt3">
                 <input
                   className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6"

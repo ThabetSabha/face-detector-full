@@ -23,3 +23,11 @@ code {
 button {
   cursor: pointer;
 }
+
+.hover-bg-black:hover {
+ background-color: black !important;
+}
+
+.hover-bg-black:focus{
+  background-color: black !important;
+ }

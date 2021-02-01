@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const SignIn = ({ loadUser, fetchUserProfile }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [wrongInfo, setWrongInfo] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const emailInput = (event) => {
     setEmail(event.target.value);
@@ -18,6 +18,7 @@ const SignIn = ({ loadUser, fetchUserProfile }) => {
     e.preventDefault();
     if (email && password) {
       //only fetch when email and password length > 0
+      setErrorMessage(null);
       fetch("signin", {
         method: "post",
         headers: { "Content-Type": "application/json" },
@@ -39,13 +40,15 @@ const SignIn = ({ loadUser, fetchUserProfile }) => {
               if (profile.email) {
                 loadUser(profile);
               } else {
-                setWrongInfo(true);
+                setErrorMessage("*Wrong email or password");
               }
             });
           } else {
-            setWrongInfo(true);
+            setErrorMessage("*Wrong email or password");
           }
         });
+    } else {
+      setErrorMessage("*Make sure all the fields are filled.");
     }
   };
 
@@ -86,11 +89,7 @@ const SignIn = ({ loadUser, fetchUserProfile }) => {
                 />
               </div>
             </fieldset>
-            {wrongInfo ? (
-              <div className="center red f6 mb3">*Wrong email or password </div>
-            ) : (
-              <></>
-            )}
+            <div className="center red f6 mb3">{errorMessage}</div>
             <div>
               <input
                 id="submitButton"

@@ -1,8 +1,9 @@
 import React from "react";
 import { Link, Route, Switch } from "react-router-dom";
 import Logo from "../logo/Logo";
+import ProfileIcon from "../ProfileIcon/profile-icon.component";
 
-const Navigation = ({ signOut }) => {
+const Navigation = ({ signOut, avatars3key }) => {
   return (
     <nav
       className="tr mt3"
@@ -13,14 +14,16 @@ const Navigation = ({ signOut }) => {
       </Link>
 
       <div
-        className="pa3 mb5"
+        className="pa2 mb5 mr3"
         style={{ display: "flex", justifyContent: "flex-end" }}
       >
         <Switch>
           {/* SignIn Nav */}
           <Route path="/signin">
             <Link to="/" style={{ textDecoration: "none" }}>
-              <p className="black underline ma0 f3 link dim pointer">Guest</p>
+              <p className="black underline ma0 f3 link dim pointer mr3">
+                Guest
+              </p>
             </Link>
           </Route>
           {/* Register Nav */}
@@ -57,22 +60,7 @@ const Navigation = ({ signOut }) => {
           </Route>
           {/* Home Nav */}
           <Route path="/home">
-            <Link to="/profile" style={{ textDecoration: "none" }}>
-              <p className="black underline ma0 mr3 f3 link dim pointer">
-                Profile
-              </p>
-            </Link>
-            <Link to="/" style={{ textDecoration: "none" }}>
-              <p
-                onClick={() => {
-                  signOut();
-                  sessionStorage.clear(); //to clear seassionStorage when we sign out
-                }}
-                className="black underline ma0 ml3 f3 link dim pointer"
-              >
-                Sign Out
-              </p>
-            </Link>
+            <ProfileIcon signOut={signOut} avatars3key={avatars3key} />
           </Route>
           {/* Guest Nav */}
           <Route path="/">

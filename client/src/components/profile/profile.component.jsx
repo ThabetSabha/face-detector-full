@@ -103,7 +103,7 @@ const Profile = ({ user, loadUser, token }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data === "success") {
-          if (oldAvatarKey && oldAvatarKey !== "avatar.jpg") {
+          if (oldAvatarKey && oldAvatarKey !== "avatar.png") {
             deleteOldAvatar(oldAvatarKey);
           }
           let avatar = formAvatarS3Key ? formAvatarS3Key : avatars3key;

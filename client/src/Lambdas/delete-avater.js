@@ -6,16 +6,13 @@ const s3 = new AWS.S3();
 const deleteBucket = process.env.deleteBucket; // << LOOK!
 
 exports.handler = async (event) => {
-  console.log(event);
-  const deleteKey = event.queryStringParameters.deleteKey;
-  const result = await deleteObject(deleteKey);
-  console.log("Result: ", result);
-  return result;
+  let body = JSON.parse(event.body)
+  const {deleteKey} = body;
+  const result = await deleteObject(deleteKey)
+  return result
 };
 
 const deleteObject = async function (deleteKey) {
-  console.log("deleteObject started");
-
   var s3Params = {
     Bucket: deleteBucket,
     Key: deleteKey,

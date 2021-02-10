@@ -6,13 +6,17 @@ const s3 = new AWS.S3();
 const uploadBucket = process.env.uploadBucket; // << LOOK!
 
 exports.handler = async (event) => {
-  const result = await getUploadURL();
-  console.log("Result: ", result);
-  return result;
+  let body = JSON.parse(event.body)
+  const {keyID} = body; //used to prevent get requests from getting a presigned URL
+  if(keyID){
+      const result = await getUploadURL();
+      return result;
+  }  else {
+    return;
+  }
 };
 
 const getUploadURL = async function () {
-  console.log("getUploadURL started");
   let actionId = Date.now();
 
   var s3Params = {

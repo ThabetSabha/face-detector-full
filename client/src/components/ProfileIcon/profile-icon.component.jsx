@@ -24,7 +24,11 @@ const ProfileIcon = ({ signOut, avatars3key }) => {
           aria-expanded={toggleDropdown}
         >
           <img
-            src={`https://face-detector-avatars.s3.me-south-1.amazonaws.com/${avatars3key}`}
+            src={
+              avatars3key
+                ? `https://face-detector-avatars.s3.me-south-1.amazonaws.com/${avatars3key}`
+                : "https://face-detector-avatars.s3.me-south-1.amazonaws.com/avatar.png"
+            }
             className="br-100 h3 w3 dib ba"
             alt="avatar"
             style={{ objectFit: "cover" }}

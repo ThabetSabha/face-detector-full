@@ -32,7 +32,12 @@ const Profile = ({ user, loadUser, token }) => {
     const { image, file } = imageData;
     try {
       //fetch the serverless function to get a presigned s3 URL
-      const lambdaRes = await fetch(`${lambdaUploadAvatarEndpoint}`);
+      const lambdaRes = await fetch(`${lambdaUploadAvatarEndpoint}`, {
+        method: "post",
+        body: JSON.stringify({
+          keyID: 1,
+        })
+      });
       const lambdaResData = await lambdaRes.json();
       const imageUploadUrl = lambdaResData.uploadURL;
       const imageUploadName = lambdaResData.photoFilename;
@@ -117,11 +122,17 @@ const Profile = ({ user, loadUser, token }) => {
   };
 
   //fetches an aws lambda fucntion that deletes the s3 object with the specified key.
-  //** has CORS to only allow access to "https://demo-face-detector.herokuapp.com/" so it won't work in dev.
+  //** has CORS configured to only allow access to "https://demo-face-detector.herokuapp.com/" so it won't work in dev.
   //Lambda function used is in lambdas folder in src.
   const deleteOldAvatar = (key) => {
     fetch(
-      `https://q0c1sv05il.execute-api.me-south-1.amazonaws.com/default/delete-avater?deleteKey=${key}`
+      "https://q0c1sv05il.execute-api.me-south-1.amazonaws.com/default/delete-avater",
+      {
+        method: "post",
+        body: JSON.stringify({
+          deleteKey: key,
+        }),
+      }
     );
   };
 

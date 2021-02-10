@@ -34,7 +34,7 @@ const Register = () => {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: email,
+          email: email.toLowerCase(),
           password: password,
           name: name,
           avatars3key: "avatar.png",

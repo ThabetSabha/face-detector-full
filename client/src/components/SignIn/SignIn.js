@@ -23,7 +23,7 @@ const SignIn = ({ loadUser, fetchUserProfile }) => {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: email,
+          email: email.toLowerCase(),
           password: password,
         }),
       })

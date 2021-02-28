@@ -1,6 +1,6 @@
 import React from "react";
 import Tilt from "react-tilt";
-import brain from "./brain.png";
+import logo from "./logo.png";
 
 const Logo = () => {
   return (
@@ -12,11 +12,11 @@ const Logo = () => {
       >
         <div className="Tilt-inner" style={{ display: "flex" }}>
           <img
-            className="pointer grow"
-            height="80px"
-            width="80px"
+            className="pointer"
+            height="70px"
+            width="70px"
             alt="logo"
-            src={brain}
+            src={logo}
           />
         </div>
       </Tilt>

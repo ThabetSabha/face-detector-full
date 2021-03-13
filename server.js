@@ -19,7 +19,7 @@ const db = knex({
   //from their website http://knexjs.org/ .
   client: "pg",
   connection: process.env.DATABASE_URL,
-  ssl: true,
+  ssl: { rejectUnauthorized: false },
 });
 
 const app = express();

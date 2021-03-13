@@ -22,7 +22,11 @@ const handleRegister = (req, res, db, bcrypt) => {
         })
 
         .then(trx.commit)
-        .catch(trx.rollback);
+        .catch((err) => {
+          trx.rollback();
+          console.log(err);
+          res.status(500).json("error with db.");
+        });
     });
   } else {
     return res.status(400).json("Unable to register");
